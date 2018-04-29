@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yokoscense</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div id="main" class="main" v-cloak>
+        <div class="menu" v-if="!isAuthorized">
+            <div class="menuCategory">
+                <div class="menuButton" @click="authorize">Connect to Google Drive</div>
+            </div>
+        </div>
+        <div class="menu" v-if="isAuthorized">
+            <div class="menuCategory">
+                <div class="menuButton" @click="$refs.file.click()">Open...</div>
+                <input class="hidden" type="file" ref="file"
+                    accept=".xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    @change="selectFile">
+            </div>
+            <ul class="menuCategory">
+                <li v-for="file in files" class="menuItem menuButton" @click="load(file)">
+                    <img :src="file.iconLink" class="menuItem__icon">
+                    {{ file.name }}
+                </li>
+            </ul>
+            <div class="menuCategory">
+                <div class="menuButton" @click="signout">Disconnect</div>
+            </div>
+        </div>
+        <iframe class="frame" :src="frameUrl" width="960" height="960"></iframe>
+    </div>
+    <div id="message" class="message" :class="classes">
+        {{ message }}
+        <span @click="hide" class="message__hide">×</span>
+    </div>
+    <div id="dropzone" class="dropzone"></div>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
