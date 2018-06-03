@@ -183,22 +183,26 @@ const vMain = new Vue({
     }
 });
 
-const $dropzone = document.getElementById('dropzone');
-document.body.addEventListener('dragenter', ev => {
-    if (ev.dataTransfer.items.length) {
-        if (ev.dataTransfer.items[0].kind === 'file') {
-            $dropzone.classList.add('dropzone--active');
+const vDropzone = new Vue({
+    el: '#dropzone',
+    data: {
+        isActive: false
+    },
+    methods: {
+        dragleave() {
+            this.isActive = false;
+        },
+        drop(ev) {
+            this.isActive = false;
+            vMain.selectFile(ev);
         }
     }
+});
+
+document.body.addEventListener('dragenter', ev => {
+    if (ev.dataTransfer.items.length) {
+        vDropzone.isActive = ev.dataTransfer.items[0].kind === 'file';
+    }
 }, false);
-$dropzone.addEventListener('dragleave', ev => {
-    $dropzone.classList.remove('dropzone--active');
-}, false);
-$dropzone.addEventListener('drop', ev => {
-    ev.preventDefault();
-    $dropzone.classList.remove('dropzone--active');
-    vMain.selectFile(ev);
-}, false);
-$dropzone.addEventListener('dragover', ev => ev.preventDefault(), false);
 
 gapi.load('client:auth2', () => vMain.initClient());

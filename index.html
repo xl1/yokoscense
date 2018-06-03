@@ -37,7 +37,9 @@
         {{ message }}
         <span @click="hide" class="message__hide">×</span>
     </div>
-    <div id="dropzone" class="dropzone"></div>
+    <div id="dropzone" class="dropzone"
+        :class="{ 'dropzone--active': isActive }"
+        @dragleave="dragleave" @drop.prevent="drop" @dragover.prevent=""></div>
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <script src="main.js"></script>
